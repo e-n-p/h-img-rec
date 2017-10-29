@@ -5,40 +5,37 @@
  */
 package h.img.rec;
 
-import java.awt.Component;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import javax.imageio.ImageIO;
-import javax.swing.*;
+import java.awt.image.BufferedImage;
+import java.util.HashSet;
+import java.util.Set;
+
 
 /**
  *
  * @author nick
  * loads image and displays file in Jframe - 23/10/17
  * --To add
- * --create another blank image
  * --drawing on blank image
  * --way to compare images
  */
 public class HImgRec{
     
-    public static void main(String[] args) {
-        
-        JFrame f = new JFrame("Load Image Sample");
-            
-        f.addWindowListener(new WindowAdapter(){
-                public void windowClosing(WindowEvent e) {
-                    System.exit(0);
-                }
-            });
+    public static void main(String[] args) throws IOException {
+        BufferedImage image;
+        Set<Integer> colours = new HashSet<Integer>();
 
-        f.add(new LoadImageApp());
-        f.pack();
-        f.setVisible(true);
         
+        //set image to edit with full file path
+        String path = "/home/nick/NetBeansProjects/gitProjects/h-img-rec/res/Hannibal.jpg";
+        //create image and place it in jFrame
+        makeImage make = new makeImage();
+        image = make.makeImage(path);
+        make.makeSubject();
+        make.makeCanvas();
+        
+        editImage edit = new editImage(image);
+        colours = edit.readColour(image);
     }
     
     
