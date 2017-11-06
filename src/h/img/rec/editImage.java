@@ -9,21 +9,27 @@ import java.util.Set;
  */
 public class editImage {
 BufferedImage image;
+int h, w;
     public editImage(BufferedImage newImg){
         this.image = newImg;
+        this.h = image.getHeight();
+        this.w = image.getWidth();
+        System.out.print("img width:"+image.getWidth());
+        System.out.print(" img height:"+image.getHeight());
+        System.out.println();
     }
     
     public Set readColour() {
         Set<Integer> colors = new HashSet<Integer>();
-        int w = image.getWidth();
-        int h = image.getHeight();
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
                 int pixel = image.getRGB(x, y);
                 colors.add(pixel);
             }
         }
-        //System.out.println("There are " + colors.size() + " colors");
+        System.out.println("There are " + colors.size() + " colors");
         return colors;
     }
+    
+    
 }
