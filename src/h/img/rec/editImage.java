@@ -1,10 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package h.img.rec;
-
 import java.awt.image.BufferedImage;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,7 +13,7 @@ BufferedImage image;
         this.image = newImg;
     }
     
-    public Set readColour(BufferedImage image) {
+    public Set readColour() {
         Set<Integer> colors = new HashSet<Integer>();
         int w = image.getWidth();
         int h = image.getHeight();
@@ -29,7 +23,7 @@ BufferedImage image;
                 colors.add(pixel);
             }
         }
-        System.out.println("There are " + colors.size() + " colors");
+        //System.out.println("There are " + colors.size() + " colors");
         return colors;
     }
 }
