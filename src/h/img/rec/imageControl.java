@@ -45,21 +45,35 @@ public class imageControl {
         
     }
     //T/F is A more like image
-    public int comparison(BufferedImage A){
-        int score=0;
-        for(int i=0;i<h;i++){
-            for(int j=0;j<w;j++){
+    public double comparison(BufferedImage A, int[] pos){
+        int highH=0, lowH=0, highW=0, lowW=0;
+        
+        if(pos[0] < pos[2]){
+            highW = pos[2];
+            lowW = pos[0];
+        }else{ 
+            highW = pos[0];
+            lowW = pos[2];
+        }
+        if(pos[1] < pos[3]){
+            highH = pos[3];
+            lowH = pos[1];
+        }else{ 
+            highH = pos[1];
+            lowH = pos[3];
+        }
+        long diff=0;
+        for(int i=lowH;i<highH;i++){
+            for(int j=lowW;j<highW;j++){
                 Color aColor = new Color(A.getRGB(j,i));
                 Color bColor = new Color(image.getRGB(j,i));
                 int redDiff = Math.abs(aColor.getRed() - bColor.getRed());
                 int blueDiff = Math.abs(aColor.getBlue() - bColor.getBlue());
                 int greenDiff = Math.abs(aColor.getGreen() - bColor.getGreen());
-                
-                if(redDiff < 30 || blueDiff < 30 || greenDiff < 30){
-                    score++;
-                }
+                diff =+ redDiff+blueDiff+greenDiff;
             }
         }
-        return score;
+        long maxDiff = 3L * 255 * w * h;
+        return 100.0 * diff/maxDiff;
     }
 }
