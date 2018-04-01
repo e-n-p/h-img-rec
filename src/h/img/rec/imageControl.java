@@ -1,7 +1,7 @@
 package h.img.rec;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import static java.awt.image.BufferedImage.TYPE_INT_ARGB;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -12,22 +12,31 @@ import javax.swing.*;
  */
 public class imageControl {
     BufferedImage image;
-    BufferedImage store;
+    BufferedImage stored;
     int h, w;
     public BufferedImage makeImage(String path) throws IOException{
         File file = new File(path);
         this.image = ImageIO.read(file);
         this.h = image.getHeight();
         this.w = image.getWidth();
-        this.store = new BufferedImage(w, h,TYPE_INT_ARGB); 
+        this.stored = new BufferedImage(w, h,image.getType()); 
         return image;
     }
     
     public void swapBetter(BufferedImage betterCopy){
-        this.store = betterCopy;
+        BufferedImage b = new BufferedImage(betterCopy.getWidth(), betterCopy.getHeight(), betterCopy.getType());
+        Graphics g = b.getGraphics();
+        g.drawImage(betterCopy, 0, 0, null);
+        g.dispose();        
+        this.stored = b;
     }
-    public BufferedImage getStore(){
-        return store;
+    public BufferedImage getStored(){
+        BufferedImage storeCopy = new BufferedImage(stored.getWidth(), stored.getHeight(), stored.getType());
+        Graphics g = storeCopy.getGraphics();
+        g.drawImage(stored, 0, 0, null);
+        g.dispose();
+        
+        return storeCopy;
     }
     public BufferedImage getImage(){
         return image;
@@ -45,9 +54,8 @@ public class imageControl {
         
     }
     //T/F is A more like image
-    public double comparison(BufferedImage A, int[] pos){
-        int highH=0, lowH=0, highW=0, lowW=0;
-        
+    public double comparisonRect(BufferedImage A,BufferedImage B, int[] pos){
+        int highW,lowW,highH,lowH;
         if(pos[0] < pos[2]){
             highW = pos[2];
             lowW = pos[0];
@@ -63,17 +71,56 @@ public class imageControl {
             lowH = pos[3];
         }
         long diff=0;
-        for(int i=lowH;i<highH;i++){
-            for(int j=lowW;j<highW;j++){
+        //System.out.println("lowH: "+ lowH+" highH: "+highH);
+        //System.out.println("lowW: "+ lowW+" highW: "+highW);
+        for(int i=lowH;i<=highH;i++){
+            for(int j=lowW;j<=highW;j++){
                 Color aColor = new Color(A.getRGB(j,i));
-                Color bColor = new Color(image.getRGB(j,i));
+                Color bColor = new Color(B.getRGB(j,i));
                 int redDiff = Math.abs(aColor.getRed() - bColor.getRed());
+                //System.out.println("comparisonRect red val"+aColor.getRed());
+                //System.out.println("image red val"+bColor.getRed());
                 int blueDiff = Math.abs(aColor.getBlue() - bColor.getBlue());
+                //System.out.println("comparisonRect blue val"+aColor.getBlue());
+                //System.out.println("image blue val"+bColor.getBlue());
                 int greenDiff = Math.abs(aColor.getGreen() - bColor.getGreen());
+                //System.out.println("comparisonRect green val"+aColor.getGreen());
+                //System.out.println("image green val"+bColor.getGreen());
                 diff =+ redDiff+blueDiff+greenDiff;
             }
         }
-        long maxDiff = 3L * 255 * w * h;
-        return 100.0 * diff/maxDiff;
+        return diff;
+    }
+    
+    public double comparisonWhole(BufferedImage A,BufferedImage B, int[] pos){
+        long diff=0;
+        for(int i=0;i<h;i++){
+            for(int j=0;j<w;j++){
+                Color aColor = new Color(A.getRGB(j,i));
+                Color bColor = new Color(B.getRGB(j,i));
+                int redDiff = Math.abs(aColor.getRed() - bColor.getRed());
+                //System.out.println("comparisonRect red val"+aColor.getRed());
+                //System.out.println("image red val"+bColor.getRed());
+                int blueDiff = Math.abs(aColor.getBlue() - bColor.getBlue());
+                //System.out.println("comparisonRect blue val"+aColor.getBlue());
+                //System.out.println("image blue val"+bColor.getBlue());
+                int greenDiff = Math.abs(aColor.getGreen() - bColor.getGreen());
+                //System.out.println("comparisonRect green val"+aColor.getGreen());
+                //System.out.println("image green val"+bColor.getGreen());
+                diff =+ redDiff+blueDiff+greenDiff;
+            }
+        }
+        return diff;
     }
 }
+
+
+/*
+only check rectangled area of change
+ for(int i=lowH;i<=highH;i++){
+            for(int j=lowW;j<=highW;j++){
+check entire picture
+ for(int i=0;i<h;i++){
+            for(int j=0;j<w;j++){
+
+*/

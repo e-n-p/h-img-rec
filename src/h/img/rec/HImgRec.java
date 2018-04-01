@@ -10,11 +10,11 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  *
  * @author nick
- * loads image and displays file in Jframe - 23/10/17
- * --To do
- * --fix comparison/image swapping
- * --details of image
- * --move code to proper methods/classes/locations
+ loads image and displays file in Jframe - 23/10/17
+ --To do
+ --fix comparisonRect/image swapping
+ --details of image
+ --move code to proper methods/classes/locations
  */
 public class HImgRec{
     
@@ -31,36 +31,48 @@ public class HImgRec{
         //display in JFrame given image
         imgCtrl.generate(image);
         //generate blank canvas with same dimensions
-        BufferedImage canvas = imgCtrl.getStore();
-        BufferedImage storeOld;
+        BufferedImage canvas = new BufferedImage(w, h,image.getType());
         Set<Integer> colours = new HashSet<>();
         editImage edit = new editImage(image);
         colours = edit.readColour();
         
-        Graphics2D graphics = canvas.createGraphics();
         
-        for(int i =0;i<5000;i++){
+        
+        for(int i =0;i<10000;i++){
+            Graphics2D graphics = canvas.createGraphics();
+            
             Color ranCol = colourSet(colours);
             graphics.setColor(ranCol);
             
             positions = lengthControl(h,w);
             // x1, y1      x2 y2
             graphics.drawLine(positions[0], positions[1], positions[2], positions[3]);
+            graphics.dispose();    
+
             
-            storeOld = imgCtrl.getStore();
-            double canvasScore = imgCtrl.comparison(canvas, positions);
-            double storeScore = imgCtrl.comparison(storeOld, positions);
-            if(canvasScore < storeScore){
+            BufferedImage storedOld = imgCtrl.getStored();
+            
+            
+            //double canvasScore = imgCtrl.comparisonRect(canvas,image,positions);
+            //double storedScore = imgCtrl.comparisonRect(storedOld,image,positions);
+            
+            double canvasScore = imgCtrl.comparisonWhole(canvas,image,positions);
+            double storedScore = imgCtrl.comparisonWhole(storedOld,image,positions);
+            
+            System.out.println("New score:"+canvasScore);
+            System.out.println("Old Score:"+storedScore);
+            if(canvasScore < storedScore){
                 //canvas gets stored
                 imgCtrl.swapBetter(canvas);
+                System.out.println("canvas better");
             }else{
                 //canvas becomes store
-                canvas = imgCtrl.getStore();
+                canvas = imgCtrl.getStored();
+                System.out.println("canvas worse");
             }
-            
         }
         imgCtrl.generate(canvas);
-        graphics.dispose();
+        
     }
     
     public static Color colourSet(Set<Integer> colours){
