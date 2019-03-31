@@ -11,38 +11,42 @@ import javax.swing.*;
  * @author nick
  */
 public class imageControl {
-    BufferedImage image;
-    BufferedImage stored;
-    int h, w;
-    public BufferedImage makeImage(String path) throws IOException{
+    private BufferedImage image;
+    private BufferedImage stored;
+    private int h, w;
+
+    BufferedImage makeImage(String path) throws IOException{
         File file = new File(path);
         this.image = ImageIO.read(file);
         this.h = image.getHeight();
         this.w = image.getWidth();
-        this.stored = new BufferedImage(w, h,image.getType()); 
+//        this.stored = new BufferedImage(w, h,image.getType());
+        this.stored = new BufferedImage(w, h,BufferedImage.TYPE_INT_ARGB);
         return image;
     }
     
-    public void swapBetter(BufferedImage betterCopy){
+    void swapBetter(BufferedImage betterCopy){
         BufferedImage b = new BufferedImage(betterCopy.getWidth(), betterCopy.getHeight(), betterCopy.getType());
         Graphics g = b.getGraphics();
         g.drawImage(betterCopy, 0, 0, null);
         g.dispose();        
         this.stored = b;
     }
-    public BufferedImage getStored(){
+
+    BufferedImage getStored(){
         BufferedImage storeCopy = new BufferedImage(stored.getWidth(), stored.getHeight(), stored.getType());
         Graphics g = storeCopy.getGraphics();
         g.drawImage(stored, 0, 0, null);
         g.dispose();
         
-        return storeCopy;
+        return this.stored;
     }
+
     public BufferedImage getImage(){
         return image;
     }
     
-    public void generate(BufferedImage toDisplay) throws IOException{
+    void generate(BufferedImage toDisplay) throws IOException{
         
         JLabel label1 = new JLabel(new ImageIcon(toDisplay));
         JFrame f = new JFrame();
@@ -53,6 +57,7 @@ public class imageControl {
         f.setVisible(true);
         
     }
+
     //T/F is A more like image
     public double comparisonRect(BufferedImage A,BufferedImage B, int[] pos){
         int highW,lowW,highH,lowH;
@@ -92,24 +97,26 @@ public class imageControl {
         return diff;
     }
     
-    public double comparisonWhole(BufferedImage A,BufferedImage B, int[] pos){
+    double comparisonWhole(BufferedImage inputImage){
         long diff=0;
+//        System.out.println("----comparisonWhole----");
         for(int i=0;i<h;i++){
             for(int j=0;j<w;j++){
-                Color aColor = new Color(A.getRGB(j,i));
-                Color bColor = new Color(B.getRGB(j,i));
+                Color aColor = new Color(inputImage.getRGB(j,i));
+                Color bColor = new Color(this.image.getRGB(j,i));
                 int redDiff = Math.abs(aColor.getRed() - bColor.getRed());
-                //System.out.println("comparisonRect red val"+aColor.getRed());
-                //System.out.println("image red val"+bColor.getRed());
+//                System.out.println("inputImage red val> "+aColor.getRed());
+//                System.out.println("targetImage red val"+bColor.getRed());
                 int blueDiff = Math.abs(aColor.getBlue() - bColor.getBlue());
-                //System.out.println("comparisonRect blue val"+aColor.getBlue());
-                //System.out.println("image blue val"+bColor.getBlue());
+//                System.out.println("inputImage blue val> "+aColor.getBlue());
+//                System.out.println("targetImage blue val"+bColor.getBlue());
                 int greenDiff = Math.abs(aColor.getGreen() - bColor.getGreen());
-                //System.out.println("comparisonRect green val"+aColor.getGreen());
-                //System.out.println("image green val"+bColor.getGreen());
+//                System.out.println("inputImage green val> "+aColor.getGreen());
+//                System.out.println("targetImage green val"+bColor.getGreen() + "\n");
                 diff =+ redDiff+blueDiff+greenDiff;
             }
         }
+//        System.out.println("----comparisonWhole----");
         return diff;
     }
 }

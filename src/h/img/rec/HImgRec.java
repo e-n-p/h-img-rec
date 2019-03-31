@@ -19,27 +19,25 @@ import java.util.concurrent.ThreadLocalRandom;
 public class HImgRec{
     
     public static void main(String[] args) throws IOException {
-        BufferedImage image;
+        BufferedImage targetImage;
         //set image to edit with full file path
-        String path = "/home/nick/NetBeansProjects/gitProjects/h-img-rec/res/drawing.png";
+        String path = "D:/Documents/workspace/h-img-rec/res/drawingB.png";
 
         //create bufferedImage type from path
         imageControl imgCtrl = new imageControl();
-        image = imgCtrl.makeImage(path);
-        int h = image.getHeight(), w = image.getWidth();
+        targetImage = imgCtrl.makeImage(path);
+        int h = targetImage.getHeight(), w = targetImage.getWidth();
         int[] positions = new int[4];
         //display in JFrame given image
-        imgCtrl.generate(image);
+        imgCtrl.generate(targetImage);
         //generate blank canvas with same dimensions
-        BufferedImage canvas = new BufferedImage(w, h,image.getType());
+        BufferedImage outputImg = new BufferedImage(w, h,targetImage.getType());
         Set<Integer> colours = new HashSet<>();
-        editImage edit = new editImage(image);
+        editImage edit = new editImage(targetImage);
         colours = edit.readColour();
         
-        
-        
-        for(int i =0;i<10000;i++){
-            Graphics2D graphics = canvas.createGraphics();
+        for( int i = 0; i<10000; i++ ){
+            Graphics2D graphics = outputImg.createGraphics();
             
             Color ranCol = colourSet(colours);
             graphics.setColor(ranCol);
@@ -49,44 +47,39 @@ public class HImgRec{
             graphics.drawLine(positions[0], positions[1], positions[2], positions[3]);
             graphics.dispose();    
 
-            
             BufferedImage storedOld = imgCtrl.getStored();
-            
             
             //double canvasScore = imgCtrl.comparisonRect(canvas,image,positions);
             //double storedScore = imgCtrl.comparisonRect(storedOld,image,positions);
             
-            double canvasScore = imgCtrl.comparisonWhole(canvas,image,positions);
-            double storedScore = imgCtrl.comparisonWhole(storedOld,image,positions);
+            double newAttempt = imgCtrl.comparisonWhole(outputImg);
+            double storedScore = imgCtrl.comparisonWhole(storedOld);
             
-            System.out.println("New score:"+canvasScore);
-            System.out.println("Old Score:"+storedScore);
-            if(canvasScore < storedScore){
-                //canvas gets stored
-                imgCtrl.swapBetter(canvas);
-                System.out.println("canvas better");
+//            System.out.println("New score:"+newAttempt);
+//            System.out.println("Old Score:"+storedScore);
+            if(newAttempt < storedScore){
+                outputImg = imgCtrl.getStored();
+//                System.out.println("newAttempt worse");
             }else{
-                //canvas becomes store
-                canvas = imgCtrl.getStored();
-                System.out.println("canvas worse");
+                imgCtrl.swapBetter(outputImg);
+//                System.out.println("storedScore better");
             }
         }
-        imgCtrl.generate(canvas);
+        imgCtrl.generate(outputImg);
         
     }
     
-    public static Color colourSet(Set<Integer> colours){
+    private static Color colourSet(Set<Integer> colours){
         Integer[] palette = colours.toArray(new Integer[colours.size()]);
         Integer randomPick = rng(palette.length);
         Color newColour = new Color(palette[randomPick]);
         return newColour;
     }
-    public static int rng(int max){
-        int ran = ThreadLocalRandom.current().nextInt(0,max);
-        return ran;
+    private static int rng(int max){
+        return ThreadLocalRandom.current().nextInt(0,max);
     }
     
-    public static int[] lengthControl(int h, int w){
+    private static int[] lengthControl(int h, int w){
         double length = Double.MAX_VALUE;
         int[] pos = new int[4];
         while(length > w/4){
@@ -94,10 +87,8 @@ public class HImgRec{
             pos[1] = rng(h);
             pos[2] = rng(w);
             pos[3] = rng(h);
-        length = Math.sqrt(((pos[2]-pos[0])*(pos[2]-pos[0]))+((pos[3]-pos[1])*(pos[3]-pos[1])));
+            length = Math.sqrt(((pos[2]-pos[0])*(pos[2]-pos[0]))+((pos[3]-pos[1])*(pos[3]-pos[1])));
         }
        return pos;
     }
-    
-    
 }

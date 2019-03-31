@@ -8,8 +8,8 @@ import java.util.Set;
  * @author nick
  */
 public class editImage {
-BufferedImage image;
-int h, w;
+private BufferedImage image;
+private int h, w;
     public editImage(BufferedImage newImg){
         this.image = newImg;
         this.h = image.getHeight();
@@ -19,7 +19,7 @@ int h, w;
         System.out.println();
     }
     
-    public Set readColour() {
+    Set readColour() {
         Set<Integer> colors = new HashSet<Integer>();
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
