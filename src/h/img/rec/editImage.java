@@ -16,8 +16,8 @@ public class editImage {
         this.image = newImg;
         this.h = image.getHeight();
         this.w = image.getWidth();
-        System.out.print("img width: " + image.getWidth());
-        System.out.print("img height: " + image.getHeight());
+        System.out.println("img width:  " + image.getWidth());
+        System.out.println("img height: " + image.getHeight());
         System.out.println();
     }
     

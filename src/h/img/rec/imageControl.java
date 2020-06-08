@@ -13,15 +13,19 @@ import javax.swing.*;
 public class imageControl {
     private BufferedImage image;
     private BufferedImage stored;
-    private int h, w;
+    private int h;
+    private int w;
+
+    public int getH() {return h;}
+    public int getW() {return w;}
+
 
     BufferedImage makeImage(String path) throws IOException{
         File file = new File(path);
         this.image = ImageIO.read(file);
         this.h = image.getHeight();
         this.w = image.getWidth();
-//        this.stored = new BufferedImage(w, h,image.getType());
-        this.stored = new BufferedImage(w, h,BufferedImage.TYPE_INT_ARGB);
+        this.stored = new BufferedImage(w, h,BufferedImage.TYPE_INT_RGB);
         return image;
     }
     
@@ -46,8 +50,7 @@ public class imageControl {
         return image;
     }
     
-    void generate(BufferedImage toDisplay) throws IOException{
-        
+    void generate(BufferedImage toDisplay){
         JLabel label1 = new JLabel(new ImageIcon(toDisplay));
         JFrame f = new JFrame();
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -55,7 +58,6 @@ public class imageControl {
         f.pack();
         f.setLocation(200,200);
         f.setVisible(true);
-        
     }
 
     //T/F is A more like image
