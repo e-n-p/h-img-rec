@@ -3,7 +3,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.IOException;
 import java.awt.image.BufferedImage;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -21,7 +20,8 @@ public class HImgRec{
     public static void main(String[] args) throws IOException {
         BufferedImage targetImage;
         //set image to edit with full file path
-        String path = "D:/Documents/workspace/h-img-rec/res/drawingB.png";
+//        String path = "D:/Documents/workspace/h-img-rec/res/drawingB.png";
+        String path = "/home/nick/Projects/h-img-rec/res/drawingCB.png";
 
         //create bufferedImage type from path
         imageControl imgCtrl = new imageControl();
@@ -32,11 +32,10 @@ public class HImgRec{
         imgCtrl.generate(targetImage);
         //generate blank canvas with same dimensions
         BufferedImage outputImg = new BufferedImage(w, h,targetImage.getType());
-        Set<Integer> colours = new HashSet<>();
         editImage edit = new editImage(targetImage);
-        colours = edit.readColour();
+        Set<Integer> colours = edit.readColour();
         
-        for( int i = 0; i<10000; i++ ){
+        for( int i = 0; i<100; i++ ){
             Graphics2D graphics = outputImg.createGraphics();
             
             Color ranCol = colourSet(colours);
@@ -70,11 +69,11 @@ public class HImgRec{
     }
     
     private static Color colourSet(Set<Integer> colours){
-        Integer[] palette = colours.toArray(new Integer[colours.size()]);
-        Integer randomPick = rng(palette.length);
-        Color newColour = new Color(palette[randomPick]);
-        return newColour;
+        Color[] palette = colours.toArray(new Color[0]);
+        int randomPick = rng(palette.length);
+        return palette[randomPick];
     }
+
     private static int rng(int max){
         return ThreadLocalRandom.current().nextInt(0,max);
     }
