@@ -10,73 +10,67 @@ import java.util.concurrent.ThreadLocalRandom;
 
 /**
  *
- * @author nick
- loads image and displays file in Jframe - 23/10/17
- --To do
- --fix comparisonRect/image swapping
+ * @author nick - 09/06/20
+ --//TODO
  --move code to proper methods/classes/locations
  --add heuristics to control drawing
- --
  --details of image
+ --add pixelation functions
  */
 public class HImgRec{
     
     public static void main(String[] args) throws IOException {
-        BufferedImage targetImage;
         //set image to edit with full file path
         //String path = "D:/Documents/workspace/h-img-rec/res/drawingB.png";
-        String path = "/home/nick/Projects/h-img-rec/res/blackSquare.jpg";
+        String path = "/home/nick/Projects/h-img-rec/res/20x20b&w.jpg";
 
         //create bufferedImage type from path
         imageControl imgCtrl = new imageControl();
-        targetImage = imgCtrl.makeImage(path);
-        int h = targetImage.getHeight();
-        int w = targetImage.getWidth();
+        BufferedImage targetImage = imgCtrl.makeImage(path);
+        int h = imgCtrl.getH();
+        int w = imgCtrl.getW();
+
         //display in JFrame given image
-        imgCtrl.generate(targetImage);
+//        imgCtrl.generate(targetImage);
 
         //generate blank canvas with same dimensions
         BufferedImage outputImg = new BufferedImage(w, h,BufferedImage.TYPE_INT_RGB);
+        setBackGround(outputImg);
+        imgCtrl.setStored(outputImg);
         editImage edit = new editImage(targetImage);
         Set<Color> colors = edit.readColour();
 
-        //set BG white
-        Graphics2D fill = outputImg.createGraphics();
-        fill.setColor(Color.WHITE);
-        fill.fillRect(0, 0, w-1, h-1);
+        for( int i = 0; i<100000; i++ ){
 
-        saveImg(outputImg, "res/out/outputA.jpg");
-        
-        Graphics2D graphics = outputImg.createGraphics();
-        for( int i = 0; i<10; i++ ){
-
-            Color ranCol = getRNGColor(colors);
-            graphics.setColor(ranCol);
+            Graphics2D graphics = outputImg.createGraphics();
+            Color rngColor = getRNGColor(colors);
+            graphics.setColor(rngColor);
 
             int[] positions = lengthControl(h,w);
             // x1, y1      x2 y2
             graphics.drawLine(positions[0], positions[1], positions[2], positions[3]);
-
-            //double canvasScore = imgCtrl.comparisonRect(canvas,image,positions);
-            //double storedScore = imgCtrl.comparisonRect(storedOld,image,positions);
+            graphics.dispose();
 
             double newAttempt = imgCtrl.comparisonWhole(outputImg);
             double storedScore = imgCtrl.comparisonWhole(imgCtrl.getStored());
-
-//            System.out.println("New score:"+newAttempt);
-//            System.out.println("Old Score:"+storedScore);
-            if(newAttempt < storedScore){
+//            saveImg(outputImg, "res/out/output" + i + "A.jpg");
+//            saveImg(imgCtrl.getStored(), "res/out/output" + i + "B.jpg");
+            System.out.println("New attempt score:" + newAttempt + " stored canvas score: " + storedScore);
+            if(storedScore < 0.5){
+                System.out.println("*******************************************");
+                System.out.println("*Program completed in " + i + " iterations*");
+                System.out.println("*******************************************");
+                break;
+            }else if(newAttempt > storedScore){
                 outputImg = imgCtrl.getStored();
-//                System.out.println("newAttempt worse");
             }else{
-                imgCtrl.swapBetter(outputImg);
-//                System.out.println("storedScore better");
+                imgCtrl.setStored(outputImg);
             }
+            saveImg(outputImg, "res/out/output" + i + ".jpg");
+//            if(i % 100 == 0){ System.out.println("loop count = " + i); }
         }
-        graphics.dispose();
-        saveImg(outputImg, "res/out/outputB.jpg");
-        imgCtrl.generate(outputImg);
-        
+//        imgCtrl.generate(outputImg);
+
     }
     
     private static Color getRNGColor(Set<Color> colours){
@@ -95,8 +89,15 @@ public class HImgRec{
             File imageOut = new File(aPath);
             ImageIO.write(bi, "jpg", imageOut);
         } catch (IOException e) {
-            System.out.println("exception caught while trying to save image to file: " + e );
+            System.out.println("Exception caught while trying to save image to file: " + e );
         }
+    }
+
+    private static void setBackGround(BufferedImage anImg){
+        Graphics2D fill = anImg.createGraphics();
+        fill.setColor(Color.WHITE);
+        fill.fillRect(0, 0, anImg.getWidth()-1, anImg.getHeight()-1);
+        fill.dispose();
     }
     
     private static int[] lengthControl(int h, int w){
