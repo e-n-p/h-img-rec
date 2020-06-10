@@ -26,7 +26,6 @@ class imageControl {
         this.targetImg = ImageIO.read(file);
         this.h = targetImg.getHeight();
         this.w = targetImg.getWidth();
-//        this.stored = new BufferedImage(w, h,BufferedImage.TYPE_INT_RGB);
         return targetImg;
     }
 
@@ -47,37 +46,18 @@ class imageControl {
         return storeCopy;
     }
 
-    void generate(BufferedImage toDisplay){
-        JLabel label1 = new JLabel(new ImageIcon(toDisplay));
-        JFrame f = new JFrame();
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.getContentPane().add(label1);
-        f.pack();
-        f.setLocation(200,200);
-        f.setVisible(true);
-    }
-
     double comparisonWhole(BufferedImage inputImage){
         long diff=0;
-//        System.out.println("----comparisonWhole----");
         for(int i=0;i<h;i++){
             for(int j=0;j<w;j++){
                 Color aColor = new Color(inputImage.getRGB(j,i));
                 Color bColor = new Color(this.targetImg.getRGB(j,i));
                 int redDiff = Math.abs(aColor.getRed() - bColor.getRed());
-//                System.out.println("inputImage red val> " +aColor.getRed());
-//                System.out.println("targetImage red val> " +bColor.getRed());
                 int blueDiff = Math.abs(aColor.getBlue() - bColor.getBlue());
-//                System.out.println("inputImage blue val> "+aColor.getBlue());
-//                System.out.println("targetImage blue val"+bColor.getBlue());
                 int greenDiff = Math.abs(aColor.getGreen() - bColor.getGreen());
-//                System.out.println("inputImage green val> "+aColor.getGreen());
-//                System.out.println("targetImage green val"+bColor.getGreen() + "\n");
-//                System.out.println("totalDiffs>" + "");
                 diff += (redDiff+blueDiff+greenDiff);
             }
         }
-//        System.out.println("----comparisonWhole----");
         return diff;
     }
 }
