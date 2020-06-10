@@ -15,11 +15,17 @@ class ImageControl {
 
     private BufferedImage targetImg;
     private BufferedImage stored;
+
+
+    private double storedScore;
     private int h;
     private int w;
 
+    void setStoredScore(double storedScore) { this.storedScore = storedScore; }
+
     int getH() { return h; }
     int getW() { return w; }
+    double getStoredScore() { return storedScore; }
     BufferedImage getTargetImg(){ return targetImg; }
 
 

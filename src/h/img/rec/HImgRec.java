@@ -21,13 +21,15 @@ public class HImgRec{
     public static void main(String[] args) throws IOException {
         //set image to edit with full file path
         //String path = "D:/Documents/workspace/h-img-rec/res/drawingB.png";
+
 /*      flowers.jpg
         blackCircle.jpg
         blackSquare.jpg
         cat.jpg
         coloredRectangles.jpg
+        20x20b&w.jpg
 */
-        String path = "/home/nick/Projects/h-img-rec/res/input/blackSquare.jpg";
+        String path = "/home/nick/Projects/h-img-rec/res/input/20x20b&w.jpg";
 
         //create bufferedImage type from path
         ImageControl imgCtrl = new ImageControl();
@@ -41,27 +43,31 @@ public class HImgRec{
         BufferedImage outputImg = new BufferedImage(w, h,BufferedImage.TYPE_INT_RGB);
         edit.setBackGround(outputImg);
         imgCtrl.setStored(outputImg);
+        imgCtrl.setStoredScore(Double.MAX_VALUE);
         Set<Color> colors = edit.readColour(h,w,targetImage);
 
-        for( int i = 0; i<300; i++ ){
+        for( int i = 0; i<30000; i++ ){
 
-            edit.draw(outputImg, EditImage.drawStyle.CIRCLE, colors);
+            edit.draw(outputImg, EditImage.drawStyle.LINE, colors);
 
             double newAttempt = imgCtrl.comparisonWhole(outputImg);
-            //TODO
-            //add function to save storedScore to imgCtrl so doesn't need to be re-computed each time
-            double storedScore = imgCtrl.comparisonWhole(imgCtrl.getStored());
+            double storedScore = imgCtrl.getStoredScore();
             //util.saveImg(outputImg, "res/out/output" + i + "A.jpg");
             //util.saveImg(imgCtrl.getStored(), "res/out/output" + i + "B.jpg");
+
             if(storedScore < 0.1){
+                System.out.println();
                 System.out.println("*******************************************");
-                System.out.println("*Program completed in " + i + " iterations*");
+                System.out.println("*  Program completed in " + i + " iterations   *");
                 System.out.println("*******************************************");
+                imgCtrl.setStored(outputImg);
+                imgCtrl.setStoredScore(newAttempt);
                 break;
             }else if(newAttempt > storedScore){
                 outputImg = imgCtrl.getStored();
             }else{
                 imgCtrl.setStored(outputImg);
+                imgCtrl.setStoredScore(newAttempt);
             }
             if(i % 100 == 0){
                 System.out.println("loop count = " + i);
