@@ -1,4 +1,5 @@
 package h.img.rec;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashSet;
@@ -8,9 +9,19 @@ import java.util.Set;
  *
  * @author nick
  */
-class editImage {
-    
-    Set readColour(int h, int w, BufferedImage anImage) {
+class EditImage {
+    private Utilities util;
+
+    EditImage(Utilities aUtil){
+        this.util = aUtil;
+    }
+
+    enum drawStyle{
+        LINE,
+        CIRCLE
+    }
+
+    Set<Color> readColour(int h, int w, BufferedImage anImage) {
         Set<Color> uniqueColors = new HashSet<>();
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
@@ -25,11 +36,11 @@ class editImage {
     void setBackGround(BufferedImage anImg){
         Graphics2D fill = anImg.createGraphics();
         fill.setColor(Color.WHITE);
-        fill.fillRect(0, 0, anImg.getWidth()-1, anImg.getHeight()-1);
+        fill.fillRect(0, 0, anImg.getWidth(), anImg.getHeight());
         fill.dispose();
     }
 
-    int[] lengthControl(int h, int w, utilities util){
+    private int[] lengthControl(int h, int w){
         double length = Double.MAX_VALUE;
         int[] pos = new int[4];
         while(length > w/4){
@@ -42,10 +53,31 @@ class editImage {
         return pos;
     }
 
-    Color getRNGColor(Set<Color> colours, utilities util){
+    private Color getRNGColor(Set<Color> colours){
         Color[] palette = colours.toArray(new Color[0]);
         int randomPick = util.rng(palette.length);
         return palette[randomPick];
+    }
+
+    void draw(BufferedImage anImg, drawStyle style, Set<Color> totalColors){
+
+        Graphics2D graphics = anImg.createGraphics();
+        Color rngColor = getRNGColor(totalColors);
+        graphics.setColor(rngColor);
+        int[] positions = lengthControl(anImg.getHeight(), anImg.getWidth());
+
+        switch (style) {
+            case LINE:
+                // x1, y1      x2 y2
+                graphics.drawLine(positions[0], positions[1], positions[2], positions[3]);
+                break;
+            case CIRCLE:
+                graphics.fillOval(positions[0], positions[1], 20, 20);
+                break;
+        }
+
+        graphics.dispose();
+
     }
 
 }

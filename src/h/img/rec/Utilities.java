@@ -7,7 +7,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ThreadLocalRandom;
 
-class utilities {
+/**
+ *
+ * @author nick
+ */
+class Utilities {
 
     void saveImg(BufferedImage anImg, String aPath){
         try {
@@ -19,9 +23,7 @@ class utilities {
         }
     }
 
-    int rng(int max){
-        return ThreadLocalRandom.current().nextInt(0,max);
-    }
+    int rng(int max){ return ThreadLocalRandom.current().nextInt(0,max); }
 
     void displayImage(BufferedImage toDisplay){
         JLabel label1 = new JLabel(new ImageIcon(toDisplay));

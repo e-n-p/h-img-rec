@@ -1,4 +1,5 @@
 package h.img.rec;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.IOException;
@@ -12,21 +13,29 @@ import java.util.Set;
  --add heuristics to control drawing
  --details of image
  --add pixelation functions
+ --automate image selection
+ --
  */
 public class HImgRec{
     
     public static void main(String[] args) throws IOException {
         //set image to edit with full file path
         //String path = "D:/Documents/workspace/h-img-rec/res/drawingB.png";
-        String path = "/home/nick/Projects/h-img-rec/res/flowers.jpg";
+/*      flowers.jpg
+        blackCircle.jpg
+        blackSquare.jpg
+        cat.jpg
+        coloredRectangles.jpg
+*/
+        String path = "/home/nick/Projects/h-img-rec/res/input/blackSquare.jpg";
 
         //create bufferedImage type from path
-        imageControl imgCtrl = new imageControl();
+        ImageControl imgCtrl = new ImageControl();
         BufferedImage targetImage = imgCtrl.makeImage(path);
-        editImage edit = new editImage();
-        utilities util = new utilities();
-        int h = imgCtrl.getH();
+        Utilities util = new Utilities();
+        EditImage edit = new EditImage(util);
         int w = imgCtrl.getW();
+        int h = imgCtrl.getH();
 
         //displayImage blank canvas with same dimensions
         BufferedImage outputImg = new BufferedImage(w, h,BufferedImage.TYPE_INT_RGB);
@@ -34,22 +43,16 @@ public class HImgRec{
         imgCtrl.setStored(outputImg);
         Set<Color> colors = edit.readColour(h,w,targetImage);
 
-        for( int i = 0; i<1000; i++ ){
+        for( int i = 0; i<300; i++ ){
 
-            Graphics2D graphics = outputImg.createGraphics();
-            Color rngColor = edit.getRNGColor(colors, util);
-            graphics.setColor(rngColor);
-
-            int[] positions = edit.lengthControl(h,w, util);
-            // x1, y1      x2 y2
-            graphics.drawLine(positions[0], positions[1], positions[2], positions[3]);
-            graphics.dispose();
+            edit.draw(outputImg, EditImage.drawStyle.CIRCLE, colors);
 
             double newAttempt = imgCtrl.comparisonWhole(outputImg);
+            //TODO
+            //add function to save storedScore to imgCtrl so doesn't need to be re-computed each time
             double storedScore = imgCtrl.comparisonWhole(imgCtrl.getStored());
-//            util.saveImg(outputImg, "res/out/output" + i + "A.jpg");
-//            util.saveImg(imgCtrl.getStored(), "res/out/output" + i + "B.jpg");
-            System.out.println("New attempt score:" + newAttempt + " stored canvas score: " + storedScore);
+            //util.saveImg(outputImg, "res/out/output" + i + "A.jpg");
+            //util.saveImg(imgCtrl.getStored(), "res/out/output" + i + "B.jpg");
             if(storedScore < 0.1){
                 System.out.println("*******************************************");
                 System.out.println("*Program completed in " + i + " iterations*");
@@ -60,8 +63,11 @@ public class HImgRec{
             }else{
                 imgCtrl.setStored(outputImg);
             }
-            util.saveImg(outputImg, "res/out/output" + i + ".jpg");
-//            if(i % 100 == 0){ System.out.println("loop count = " + i); }
+            if(i % 100 == 0){
+                System.out.println("loop count = " + i);
+                System.out.println("New attempt score:" + newAttempt + " stored canvas score: " + storedScore);
+                util.saveImg(outputImg, "res/out/output" + i + ".jpg");
+            }
         }
         util.displayImage(outputImg);
     }

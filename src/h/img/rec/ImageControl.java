@@ -1,16 +1,18 @@
 package h.img.rec;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import javax.swing.*;
+
 /**
  *
  * @author nick
  */
-class imageControl {
+class ImageControl {
+
     private BufferedImage targetImg;
     private BufferedImage stored;
     private int h;
