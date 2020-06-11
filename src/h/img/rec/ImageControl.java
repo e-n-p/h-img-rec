@@ -28,7 +28,7 @@ class ImageControl {
     double getStoredScore() { return storedScore; }
     BufferedImage getTargetImg(){ return targetImg; }
 
-
+    //TODO -separate bufferedImg constructor to util and move rest to constructor?
     BufferedImage makeImage(String path) throws IOException{
         File file = new File(path);
         this.targetImg = ImageIO.read(file);

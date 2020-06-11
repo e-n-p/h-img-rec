@@ -13,6 +13,9 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 class Utilities {
 
+    //TODO - logging
+    //     - reading parameter input file?
+
     void saveImg(BufferedImage anImg, String aPath){
         try {
             BufferedImage bi = anImg;

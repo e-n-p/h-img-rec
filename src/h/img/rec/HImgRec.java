@@ -21,15 +21,15 @@ public class HImgRec{
     public static void main(String[] args) throws IOException {
         //set image to edit with full file path
         //String path = "D:/Documents/workspace/h-img-rec/res/drawingB.png";
-
-/*      flowers.jpg
+/*
+        flowers.jpg
         blackCircle.jpg
         blackSquare.jpg
         cat.jpg
         coloredRectangles.jpg
         20x20b&w.jpg
 */
-        String path = "/home/nick/Projects/h-img-rec/res/input/20x20b&w.jpg";
+        String path = "/home/nick/Projects/h-img-rec/res/input/flowers.jpg";
 
         //create bufferedImage type from path
         ImageControl imgCtrl = new ImageControl();
@@ -38,6 +38,7 @@ public class HImgRec{
         EditImage edit = new EditImage(util);
         int w = imgCtrl.getW();
         int h = imgCtrl.getH();
+        int iter = 100000;
 
         //displayImage blank canvas with same dimensions
         BufferedImage outputImg = new BufferedImage(w, h,BufferedImage.TYPE_INT_RGB);
@@ -45,8 +46,11 @@ public class HImgRec{
         imgCtrl.setStored(outputImg);
         imgCtrl.setStoredScore(Double.MAX_VALUE);
         Set<Color> colors = edit.readColour(h,w,targetImage);
+        System.out.println("Input image details: ");
+        System.out.println("Width: " + w + " Height: " + h);
+        System.out.println("Color count: " + colors.size());
 
-        for( int i = 0; i<30000; i++ ){
+        for( int i = 1; i<=iter; i++ ){
 
             edit.draw(outputImg, EditImage.drawStyle.LINE, colors);
 
@@ -70,8 +74,8 @@ public class HImgRec{
                 imgCtrl.setStoredScore(newAttempt);
             }
             if(i % 100 == 0){
-                System.out.println("loop count = " + i);
-                System.out.println("New attempt score:" + newAttempt + " stored canvas score: " + storedScore);
+                System.out.println("loop count: " + i);
+                System.out.println("Stored canvas score: " + storedScore);
                 util.saveImg(outputImg, "res/out/output" + i + ".jpg");
             }
         }

@@ -43,7 +43,7 @@ class EditImage {
     private int[] lengthControl(int h, int w){
         double length = Double.MAX_VALUE;
         int[] pos = new int[4];
-        while(length > w/4){
+        while(length > w/8){
             pos[0] = util.rng(w);
             pos[1] = util.rng(h);
             pos[2] = util.rng(w);
@@ -72,7 +72,7 @@ class EditImage {
                 graphics.drawLine(positions[0], positions[1], positions[2], positions[3]);
                 break;
             case CIRCLE:
-                graphics.fillOval(positions[0], positions[1], 20, 20);
+                graphics.fillOval(positions[0], positions[1], 10, 10);
                 break;
         }
 
