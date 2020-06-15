@@ -71,7 +71,6 @@ class EditImage {
         Color rngColor = getRNGColor(totalColors);
         graphics.setColor(rngColor);
         int[] positions = positioning(anImg.getHeight(), anImg.getWidth());
-
         switch (style) {
             case LINE:
                 // x1, y1      x2 y2

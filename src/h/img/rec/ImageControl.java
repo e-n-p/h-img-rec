@@ -70,19 +70,7 @@ class ImageControl {
     }
 }
 
-
-/*
-only check rectangled area of change
- for(int i=lowH;i<=highH;i++){
-            for(int j=lowW;j<=highW;j++){
-check entire picture
- for(int i=0;i<h;i++){
-            for(int j=0;j<w;j++){
-
-*/
-
-//    //T/F is A more like targetImg
-//    public double comparisonRect(BufferedImage A,BufferedImage B, int[] pos){
+//    double comparisonRect(BufferedImage inputImage, int[] pos){
 //        int highW,lowW,highH,lowH;
 //        if(pos[0] < pos[2]){
 //            highW = pos[2];
@@ -103,18 +91,12 @@ check entire picture
 //        //System.out.println("lowW: "+ lowW+" highW: "+highW);
 //        for(int i=lowH;i<=highH;i++){
 //            for(int j=lowW;j<=highW;j++){
-//                Color aColor = new Color(A.getRGB(j,i));
-//                Color bColor = new Color(B.getRGB(j,i));
+//                Color aColor = new Color(inputImage.getRGB(j,i));
+//                Color bColor = new Color(this.targetImg.getRGB(j,i));
 //                int redDiff = Math.abs(aColor.getRed() - bColor.getRed());
-//                //System.out.println("comparisonRect red val"+aColor.getRed());
-//                //System.out.println("targetImg red val"+bColor.getRed());
 //                int blueDiff = Math.abs(aColor.getBlue() - bColor.getBlue());
-//                //System.out.println("comparisonRect blue val"+aColor.getBlue());
-//                //System.out.println("targetImg blue val"+bColor.getBlue());
 //                int greenDiff = Math.abs(aColor.getGreen() - bColor.getGreen());
-//                //System.out.println("comparisonRect green val"+aColor.getGreen());
-//                //System.out.println("targetImg green val"+bColor.getGreen());
-//                diff =+ redDiff+blueDiff+greenDiff;
+//                diff += redDiff+blueDiff+greenDiff;
 //            }
 //        }
 //        return diff;
