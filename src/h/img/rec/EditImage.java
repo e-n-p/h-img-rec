@@ -18,7 +18,9 @@ class EditImage {
 
     enum drawStyle{
         LINE,
-        CIRCLE
+        THICK_LINE,
+        CIRCLE,
+        ARC
     }
 
     Set<Color> readColour(int h, int w, BufferedImage anImage) {
@@ -40,7 +42,7 @@ class EditImage {
         fill.dispose();
     }
 
-    private int[] lengthControl(int h, int w){
+    private int[] positioning(int h, int w){
         double length = Double.MAX_VALUE;
         int[] pos = new int[4];
         while(length > w/8){
@@ -51,6 +53,10 @@ class EditImage {
             length = Math.sqrt(((pos[2]-pos[0])*(pos[2]-pos[0]))+((pos[3]-pos[1])*(pos[3]-pos[1])));
         }
         return pos;
+    }
+
+    private int lengthControl(){
+        return 1;
     }
 
     private Color getRNGColor(Set<Color> colours){
@@ -64,15 +70,23 @@ class EditImage {
         Graphics2D graphics = anImg.createGraphics();
         Color rngColor = getRNGColor(totalColors);
         graphics.setColor(rngColor);
-        int[] positions = lengthControl(anImg.getHeight(), anImg.getWidth());
+        int[] positions = positioning(anImg.getHeight(), anImg.getWidth());
 
         switch (style) {
             case LINE:
                 // x1, y1      x2 y2
                 graphics.drawLine(positions[0], positions[1], positions[2], positions[3]);
                 break;
+            case THICK_LINE:
+                //thick_line
+                graphics.fillRect(positions[0], positions[1], 3, 60);
+                break;
             case CIRCLE:
-                graphics.fillOval(positions[0], positions[1], 10, 10);
+                graphics.fillOval(positions[0], positions[1], 15, 15);
+                break;
+            case ARC:
+                //arc
+                graphics.fillArc(positions[0], positions[1],33,50, 25, 30);
                 break;
         }
 
