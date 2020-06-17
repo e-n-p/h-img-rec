@@ -30,7 +30,7 @@ public class HImgRec{
         String path = "/home/nick/Projects/h-img-rec/res/input/flowers.jpg";
 */
         String filePath = "D:/Documents/workspace/h-img-rec/res/input/";
-        String image = "myFace";
+        String image = "Hannibal";
         String fileType = ".jpg";
         String path = filePath + image + fileType;
 
@@ -40,14 +40,14 @@ public class HImgRec{
         EditImage edit = new EditImage(util);
         int w = imgCtrl.getW();
         int h = imgCtrl.getH();
-        int iter = 1000;
+        int iter = 10000;
         long processTime, completionTime;
         EditImage.drawStyle drawType = EditImage.drawStyle.THICK_LINE;
 
         BufferedImage outputImg = new BufferedImage(w, h,BufferedImage.TYPE_INT_RGB);
         edit.setBackGround(outputImg);
         imgCtrl.setStored(outputImg);
-        imgCtrl.setStoredScore(Double.MAX_VALUE);
+        imgCtrl.setStoredScore(Integer.MAX_VALUE);
         Set<Color> colors = edit.readColour(h,w,targetImage);
         processTime = System.currentTimeMillis();
         Logging logWrite = new Logging(image, drawType.toString(),String.valueOf(processTime) ,2);
@@ -56,8 +56,8 @@ public class HImgRec{
         for( int i = 1; i<=iter; i++ ){
 
             edit.draw(outputImg, drawType, colors);
-            double newAttempt = imgCtrl.comparisonWhole(outputImg);
-            double storedScore = imgCtrl.getStoredScore();
+            int newAttempt = imgCtrl.comparisonWhole(outputImg);
+            int storedScore = imgCtrl.getStoredScore();
 
             if(storedScore < 0.1){
                 logWrite.logCompletion(i);

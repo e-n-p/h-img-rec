@@ -90,7 +90,6 @@ class EditImage {
         }
 
         graphics.dispose();
-
     }
 
 }

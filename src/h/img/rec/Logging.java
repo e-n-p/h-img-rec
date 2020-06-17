@@ -49,7 +49,7 @@ class Logging {
         write(toFile);
     }
 
-    void logLoopData(int i, double currentScore){
+    void logLoopData(int i, int currentScore){
         String loop = "loop count: ";
         String score = "Stored canvas score: ";
         System.out.println(loop + i);
