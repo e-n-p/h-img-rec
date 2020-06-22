@@ -15,7 +15,8 @@ class Logging {
     Logging(String fileName, String drawMethod, String timeCode, int setLevel) {
         try {
             String finalFileName = fileName + "-" + drawMethod + "-" + timeCode + ".txt";
-            this.fileWriter = new FileWriter("D://Documents//workspace//h-img-rec//res//out//" + finalFileName);
+//            this.fileWriter = new FileWriter("D://Documents//workspace//h-img-rec//res//out//" + finalFileName);
+            this.fileWriter = new FileWriter("/home/nick/Projects/h-img-rec/res/out/" + finalFileName);
             if(setLevel > 2 || setLevel < 0){
                 throw new Exception("Invalid Log level");
             }

@@ -10,10 +10,26 @@ import java.util.Set;
  * @author nick
  */
 class EditImage {
-    private Utilities util;
 
-    EditImage(Utilities aUtil){
-        this.util = aUtil;
+    private static EditImage instance;
+    private Utilities util = new Utilities();
+    private drawStyle style;
+
+    private EditImage(){}
+
+    static EditImage getInstance(){
+        if(instance ==null){
+            instance = new EditImage();
+        }
+        return instance;
+    }
+
+    void setStyle(drawStyle style) {
+        this.style = style;
+    }
+
+    drawStyle getStyle(){
+        return this.style;
     }
 
     enum drawStyle{
@@ -55,6 +71,7 @@ class EditImage {
         return pos;
     }
 
+    //for drawing methods that aren't LINE
     private int lengthControl(){
         return 1;
     }
@@ -65,13 +82,13 @@ class EditImage {
         return palette[randomPick];
     }
 
-    void draw(BufferedImage anImg, drawStyle style, Set<Color> totalColors){
+    void draw(BufferedImage anImg, Set<Color> totalColors){
 
         Graphics2D graphics = anImg.createGraphics();
         Color rngColor = getRNGColor(totalColors);
         graphics.setColor(rngColor);
         int[] positions = positioning(anImg.getHeight(), anImg.getWidth());
-        switch (style) {
+        switch (this.style) {
             case LINE:
                 // x1, y1      x2 y2
                 graphics.drawLine(positions[0], positions[1], positions[2], positions[3]);
