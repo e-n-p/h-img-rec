@@ -71,7 +71,7 @@ class EditImage {
         return pos;
     }
 
-    //for drawing methods that aren't LINE
+    //TODO for drawing methods that aren't LINE
     private int lengthControl(){
         return 1;
     }
