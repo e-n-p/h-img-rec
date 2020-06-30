@@ -8,15 +8,26 @@ import java.awt.image.BufferedImage;
  *
  * @author nick
  */
-class ImageControl {
+class ImageComparison {
+
+    private static ImageComparison instance;
 
     private BufferedImage targetImg;
     private BufferedImage stored;
 
-
     private int storedScore;
     private int h;
     private int w;
+
+
+    private ImageComparison(){}
+
+    static ImageComparison getInstance(){
+        if( instance == null){
+            instance = new ImageComparison();
+        }
+        return instance;
+    }
 
     void setStoredScore(int storedScore) { this.storedScore = storedScore; }
 

@@ -1,13 +1,9 @@
 package h.img.rec;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.io.IOException;
 import java.awt.image.BufferedImage;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
-
-import static javafx.application.Platform.exit;
 
 /**
  * @author nick - 15/06/20
@@ -34,10 +30,11 @@ public class HImgRec{
         String fileType = ".jpg";
         String path = filePath + image + fileType;
 
-        ImageControl imgCtrl = new ImageControl();
-        BufferedImage targetImage = imgCtrl.makeImage(path);
+        ImageComparison imgCtrl = ImageComparison.getInstance();
         Utilities util = new Utilities();
+        BufferedImage targetImage = util.accessImg(path);
         EditImage edit = EditImage.getInstance();
+        imgCtrl.setTargetImage(targetImage);
         int w = imgCtrl.getW();
         int h = imgCtrl.getH();
         int iter = 1000000;
@@ -48,7 +45,7 @@ public class HImgRec{
         imgCtrl.setStored(outputImg);
         imgCtrl.setStoredScore(Integer.MAX_VALUE);
         Set<Color> colors = edit.readColour(h,w,targetImage);
-        edit.setStyle(EditImage.drawStyle.LINE);
+        edit.setStyle(EditImage.drawStyle.THICK_LINE);
         processTime = System.currentTimeMillis();
         Logging logWrite = new Logging(image, edit.getStyle().toString(),String.valueOf(processTime) ,2);
         logWrite.logImageDetails(w,h,colors.size());
@@ -74,6 +71,7 @@ public class HImgRec{
                 logWrite.logLoopData(i,storedScore);
                 util.saveImg(outputImg, "res/out/output" + i + ".jpg");
             }
+
         }
         completionTime = System.currentTimeMillis() - processTime;
         logWrite.logImageDetails(w,h,colors.size());
