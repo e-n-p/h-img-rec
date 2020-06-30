@@ -3,9 +3,6 @@ package h.img.rec;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 
 /**
  *
@@ -28,13 +25,10 @@ class ImageControl {
     int getStoredScore() { return storedScore; }
     BufferedImage getTargetImg(){ return targetImg; }
 
-    //TODO -separate bufferedImg constructor to util and move rest to constructor?
-    BufferedImage makeImage(String path) throws IOException {
-        File file = new File(path);
-        this.targetImg = ImageIO.read(file);
+    void setTargetImage(BufferedImage TargetImg) {
+        this.targetImg = TargetImg;
         this.h = targetImg.getHeight();
         this.w = targetImg.getWidth();
-        return targetImg;
     }
 
     void setStored(BufferedImage newToStore) {

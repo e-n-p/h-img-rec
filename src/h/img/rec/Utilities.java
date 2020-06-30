@@ -13,7 +13,7 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 class Utilities {
 
-    //TODO - logging
+    //TODO -
     //     - reading parameter input file?
 
     void saveImg(BufferedImage anImg, String aPath){
@@ -24,6 +24,11 @@ class Utilities {
         } catch (IOException e) {
             System.out.println("Exception caught while trying to save image to file: " + e );
         }
+    }
+
+    BufferedImage accessImg(String path) throws IOException {
+        File file = new File(path);
+        return ImageIO.read(file);
     }
 
     int rng(int max){ return ThreadLocalRandom.current().nextInt(0,max); }
