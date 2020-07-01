@@ -26,7 +26,7 @@ public class HImgRec{
         String filePath = "D:/Documents/workspace/h-img-rec/res/input/";
 */
         String filePath = "/home/nick/Projects/h-img-rec/res/input/";
-        String image = "coloredRectangles";
+        String image = "flowers";
         String fileType = ".jpg";
         String path = filePath + image + fileType;
 
@@ -37,7 +37,7 @@ public class HImgRec{
         imgCtrl.setTargetImage(targetImage);
         int w = imgCtrl.getW();
         int h = imgCtrl.getH();
-        int iter = 1000000;
+        int iter = 100000;
         long processTime, completionTime;
 
         BufferedImage outputImg = new BufferedImage(w, h,BufferedImage.TYPE_INT_RGB);
@@ -50,25 +50,33 @@ public class HImgRec{
         Logging logWrite = new Logging(image, edit.getStyle().toString(),String.valueOf(processTime) ,2);
         logWrite.logImageDetails(w,h,colors.size());
 
+        /////
+        GeneticAlgorithm ga = new GeneticAlgorithm(10,w,h,0,0,10);
+        /////
+
         for( int i = 1; i<=iter; i++ ){
 
-            edit.draw(outputImg, colors);
-            int newAttempt = imgCtrl.comparisonWhole(outputImg);
-            int storedScore = imgCtrl.getStoredScore();
+            edit.drawFromInput(outputImg, ga.run());
 
-            if(storedScore < 0.1){
-                logWrite.logCompletion(i);
-                imgCtrl.setStored(outputImg);
-                imgCtrl.setStoredScore(newAttempt);
-                break;
-            }else if(newAttempt > storedScore){
-                outputImg = imgCtrl.getStored();
-            }else{
-                imgCtrl.setStored(outputImg);
-                imgCtrl.setStoredScore(newAttempt);
-            }
+            int newAttempt = imgCtrl.comparisonWhole(outputImg);
+
+//            edit.draw(outputImg, colors);
+//            int newAttempt = imgCtrl.comparisonWhole(outputImg);
+//            int storedScore = imgCtrl.getStoredScore();
+//
+//            if(storedScore < 0.1){
+//                logWrite.logCompletion(i);
+//                imgCtrl.setStored(outputImg);
+//                imgCtrl.setStoredScore(newAttempt);
+//                break;
+//            }else if(newAttempt > storedScore){
+//                outputImg = imgCtrl.getStored();
+//            }else{
+//                imgCtrl.setStored(outputImg);
+//                imgCtrl.setStoredScore(newAttempt);
+//            }
             if(i % 100 == 0){
-                logWrite.logLoopData(i,storedScore);
+                logWrite.logLoopData(i,newAttempt);
                 util.saveImg(outputImg, "res/out/output" + i + ".jpg");
             }
 

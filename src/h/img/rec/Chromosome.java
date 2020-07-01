@@ -30,7 +30,6 @@ class Chromosome{
         this.x = Integer.valueOf(constructor.get(1));
         this.y = Integer.valueOf(constructor.get(2));
         this.color = new Color(Integer.valueOf(rgb[0]),Integer.valueOf(rgb[0]),Integer.valueOf(rgb[0]));
-
     }
 
     Chromosome(int maxX, int maxY) {
@@ -38,6 +37,7 @@ class Chromosome{
         this.x = util.rng(maxX);
         this.y = util.rng(maxY);
         this.color = new Color(util.rng(255),util.rng(255),util.rng(255));
+//        print();
     }
 
     ArrayList<String> toArray(){
@@ -48,6 +48,11 @@ class Chromosome{
         chromosomeRepresentation.add(String.valueOf(this.y));
 
         return chromosomeRepresentation;
+    }
+
+    void print(){
+        System.out.println("this chromosome = " + this.x + " " + this.y + " " +
+                            this.color.getRed() + "," + this.color.getBlue() + "," + this.color.getGreen() );
     }
 
     //    int getFit(){

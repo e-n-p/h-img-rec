@@ -17,16 +17,16 @@ public class ThickLineChromosome extends Chromosome implements Comparable<ThickL
     public void setWidth(int width) { this.width = width; }
     public int getHeight() { return height; }
 
-//    ThickLineChromosome() {
-//        super();
-//    }
-
     ThickLineChromosome(ArrayList<String> constructor) {
         super(constructor);
+        this.width =3;
+        this.height=60;
     }
 
     ThickLineChromosome(int maxX, int maxY) {
         super(maxX, maxY);
+        this.width =3;
+        this.height=60;
     }
 
     public void setHeight(int height) { this.height = height; }
@@ -36,20 +36,34 @@ public class ThickLineChromosome extends Chromosome implements Comparable<ThickL
         ImageComparison imgC =  ImageComparison.getInstance();
 
         Color aColor = color;
-        for(int i=this.x; i < (this.x+width) ; i++){
-            for(int j=this.y; j < (this.y+height) ; j++){
+//        System.out.println("heightCalc " + this.y + ", " + height);
+//        System.out.println("widthCalc " + this.x + ", " + width);
+        for(int i=this.y; i < (this.y+height) ; i++){
+            for(int j=this.x; j < (this.x+width) ; j++){
                 Color bColor = new Color(imgC.getTargetImg().getRGB(j, i));
                 int redDiff = Math.abs(aColor.getRed() - bColor.getRed());
                 int blueDiff = Math.abs(aColor.getBlue() - bColor.getBlue());
                 int greenDiff = Math.abs(aColor.getGreen() - bColor.getGreen());
+//                System.out.println("colorDiffs red:" + redDiff + " blue: " + blueDiff + " green: " + greenDiff);
                 diff += redDiff + blueDiff + greenDiff;
             }
         }
+//        System.out.println("diff" + diff);
         return diff;
     }
 
     @Override
+    void print() {
+        System.out.println("this chromosome = x co-ord" +
+                            this.x + ", y co-ord " + this.y +
+                            " RGB values=" + this.color.getRed() + "," + this.color.getBlue() + "," + this.color.getGreen() +
+                            " line thickness " + this.width + ", line height " + this.height);
+
+    }
+
+    @Override
     public int compareTo(ThickLineChromosome chromo) {
+//        return (this.fitness() < chromo.fitness() ? -1 : (this.fitness() == chromo.fitness() ? 0 : 1));
         return (this.fitness() < chromo.fitness() ? -1 : (this.fitness() == chromo.fitness() ? 0 : 1));
     }
 

@@ -2,6 +2,7 @@ package h.img.rec;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -80,6 +81,16 @@ class EditImage {
         Color[] palette = colours.toArray(new Color[0]);
         int randomPick = util.rng(palette.length);
         return palette[randomPick];
+    }
+
+    //TODO new draw method from given pre-decided input
+    void drawFromInput(BufferedImage anImg, ArrayList<ThickLineChromosome> input){
+        for(ThickLineChromosome tlc : input){
+            Graphics2D graphics = anImg.createGraphics();
+            graphics.setColor(tlc.getColor());
+            graphics.fillRect(tlc.getX(),tlc.getY(),3,60);
+            graphics.dispose();
+        }
     }
 
     void draw(BufferedImage anImg, Set<Color> totalColors){

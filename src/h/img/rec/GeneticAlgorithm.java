@@ -1,12 +1,12 @@
 package h.img.rec;
 
-import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
-public class GeneticAlgorithm {
-
+class GeneticAlgorithm {
+    //TODO correct polymorphism
+    //mutation rate
+    //crossover rates and different implementations
     private int popSize;
     private double muteRate;
     private double crossOverRate;
@@ -27,15 +27,15 @@ public class GeneticAlgorithm {
 
     //main for class
     //change return type
-    void run(){
+    ArrayList<ThickLineChromosome> run(){
         initPopulation();
         for(int i=0;i<generations;i++){
             crossover();
 //            mutate();
             cull();
+//            computeAVGFitness();
         }
-        //sort ArrayList by fitness
-        //return best -- top %?
+        return population;
     }
 
     //create population
@@ -47,7 +47,7 @@ public class GeneticAlgorithm {
                 case LINE:
                     break;
                 case THICK_LINE:
-                    population.add(new ThickLineChromosome(maxX, maxY));
+                    population.add(new ThickLineChromosome(maxX-3, maxY-60));
                     break;
                 case ARC:
                     break;
@@ -57,8 +57,14 @@ public class GeneticAlgorithm {
         }
     }
 
-    //get Avgerage fitness? totally necessary?
-    // int/double computeAVGFitness(){ }
+    void computeAVGFitness(){
+        int avg=0;
+        for(ThickLineChromosome tlc : population){
+            avg += tlc.fitness();
+        }
+        System.out.println("population average fitness:= " + (avg / popSize));
+
+    }
 
     //breeding
     private void onePointCross(){
@@ -81,10 +87,12 @@ public class GeneticAlgorithm {
             for(int j=0; j<3; j++){
 
                 if( util.rng(1) == 0 ){
-                    child.add(parent0.get(i));
+                    child.add(parent0.get(j));
+//                    System.out.println(parent0.get(j));
 
                 }else{
-                    child.add(parent1.get(i));
+                    child.add(parent1.get(j));
+//                    System.out.println(parent1.get(j));
                 }
 
             }
@@ -103,11 +111,14 @@ public class GeneticAlgorithm {
     //culling popSize
     private void cull(){
         Collections.sort(population);
+//        System.out.println(":::::::::::::");
+//        System.out.println("best fit " + population.get(0).fitness() );
+//        System.out.println("worst fit " + population.get(population.size()-1).fitness() );
+//        System.out.println(":::::::::::::");
         while (population.size() > popSize){
             int newSize = population.size();
             population.remove(newSize-1);
         }
-
     }
 
 }
