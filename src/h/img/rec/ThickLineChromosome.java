@@ -3,13 +3,8 @@ package h.img.rec;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class ThickLineChromosome extends Chromosome implements Comparable<ThickLineChromosome> {
+public class ThickLineChromosome extends Chromosome {
 
-//    private Color color;
-//    private int x;
-//    private int y;
-
-    //thickLine eles
     private int width;
     private int height;
 
@@ -36,19 +31,15 @@ public class ThickLineChromosome extends Chromosome implements Comparable<ThickL
         ImageComparison imgC =  ImageComparison.getInstance();
 
         Color aColor = color;
-//        System.out.println("heightCalc " + this.y + ", " + height);
-//        System.out.println("widthCalc " + this.x + ", " + width);
         for(int i=this.y; i < (this.y+height) ; i++){
             for(int j=this.x; j < (this.x+width) ; j++){
                 Color bColor = new Color(imgC.getTargetImg().getRGB(j, i));
                 int redDiff = Math.abs(aColor.getRed() - bColor.getRed());
                 int blueDiff = Math.abs(aColor.getBlue() - bColor.getBlue());
                 int greenDiff = Math.abs(aColor.getGreen() - bColor.getGreen());
-//                System.out.println("colorDiffs red:" + redDiff + " blue: " + blueDiff + " green: " + greenDiff);
                 diff += redDiff + blueDiff + greenDiff;
             }
         }
-//        System.out.println("diff" + diff);
         return diff;
     }
 
@@ -61,10 +52,9 @@ public class ThickLineChromosome extends Chromosome implements Comparable<ThickL
 
     }
 
-    @Override
-    public int compareTo(ThickLineChromosome chromo) {
+//    @Override
+//    public int compareTo(ThickLineChromosome chromo) {
 //        return (this.fitness() < chromo.fitness() ? -1 : (this.fitness() == chromo.fitness() ? 0 : 1));
-        return (this.fitness() < chromo.fitness() ? -1 : (this.fitness() == chromo.fitness() ? 0 : 1));
-    }
+//    }
 
 }

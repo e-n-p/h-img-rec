@@ -26,7 +26,7 @@ public class HImgRec{
         String filePath = "D:/Documents/workspace/h-img-rec/res/input/";
 */
         String filePath = "/home/nick/Projects/h-img-rec/res/input/";
-        String image = "flowers";
+        String image = "myFace";
         String fileType = ".jpg";
         String path = filePath + image + fileType;
 
@@ -37,7 +37,7 @@ public class HImgRec{
         imgCtrl.setTargetImage(targetImage);
         int w = imgCtrl.getW();
         int h = imgCtrl.getH();
-        int iter = 100000;
+        int iter = 10000;
         long processTime, completionTime;
 
         BufferedImage outputImg = new BufferedImage(w, h,BufferedImage.TYPE_INT_RGB);
@@ -51,7 +51,7 @@ public class HImgRec{
         logWrite.logImageDetails(w,h,colors.size());
 
         /////
-        GeneticAlgorithm ga = new GeneticAlgorithm(10,w,h,0,0,10);
+        GeneticAlgorithm ga = new GeneticAlgorithm(10,w,h,20,0,50);
         /////
 
         for( int i = 1; i<=iter; i++ ){

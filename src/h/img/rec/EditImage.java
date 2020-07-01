@@ -84,8 +84,8 @@ class EditImage {
     }
 
     //TODO new draw method from given pre-decided input
-    void drawFromInput(BufferedImage anImg, ArrayList<ThickLineChromosome> input){
-        for(ThickLineChromosome tlc : input){
+    void drawFromInput(BufferedImage anImg, ArrayList<Chromosome> input){
+        for(Chromosome tlc : input){
             Graphics2D graphics = anImg.createGraphics();
             graphics.setColor(tlc.getColor());
             graphics.fillRect(tlc.getX(),tlc.getY(),3,60);

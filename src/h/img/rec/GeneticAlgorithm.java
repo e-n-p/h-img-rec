@@ -1,22 +1,23 @@
 package h.img.rec;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
 class GeneticAlgorithm {
-    //TODO correct polymorphism
+    //TODO
     //mutation rate
     //crossover rates and different implementations
     private int popSize;
-    private double muteRate;
+    private int muteRate;
     private double crossOverRate;
     private int maxX;
     private int maxY;
     private int generations;
-    private ArrayList<ThickLineChromosome> population = new ArrayList<>();
+    private ArrayList<Chromosome> population = new ArrayList<>();
 
     //set values
-    GeneticAlgorithm(int popSize, int x, int y, double muteRate, double crossOverRate, int iters){
+    GeneticAlgorithm(int popSize, int x, int y, int muteRate, double crossOverRate, int iters){
         this.popSize = popSize;
         this.generations = iters;
         this.maxX = x;
@@ -25,13 +26,11 @@ class GeneticAlgorithm {
         this.crossOverRate = crossOverRate;
     }
 
-    //main for class
-    //change return type
-    ArrayList<ThickLineChromosome> run(){
+    ArrayList<Chromosome> run(){
         initPopulation();
         for(int i=0;i<generations;i++){
             crossover();
-//            mutate();
+            mutate();
             cull();
 //            computeAVGFitness();
         }
@@ -52,6 +51,8 @@ class GeneticAlgorithm {
                 case ARC:
                     break;
                 case CIRCLE:
+                    //e.g
+//                    population.add(new CircleChromosome(0,0,0));
                     break;
             }
         }
@@ -59,7 +60,7 @@ class GeneticAlgorithm {
 
     void computeAVGFitness(){
         int avg=0;
-        for(ThickLineChromosome tlc : population){
+        for(Chromosome tlc : population){
             avg += tlc.fitness();
         }
         System.out.println("population average fitness:= " + (avg / popSize));
@@ -104,6 +105,25 @@ class GeneticAlgorithm {
 
     //mutation
     private void mutate(){
+        Utilities util = new Utilities();
+        for(Chromosome tlc : population ){
+            for(int j=0; j<3; j++) {
+                if (util.rng(100) <= muteRate) {
+                    switch( util.rng(3) ){
+                        case 0:
+                            tlc.setX(util.rng(maxX-3));
+                            break;
+                        case 1:
+                            tlc.setY(util.rng(maxY-60));
+                            break;
+                        case 2:
+                            tlc.setColor(new Color(util.rng(255),util.rng(255),util.rng(255)));
+                            break;
+                    }
+
+                }
+            }
+        }
 
     }
 

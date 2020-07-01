@@ -3,7 +3,7 @@ package h.img.rec;
 import java.awt.*;
 import java.util.ArrayList;
 
-class Chromosome{
+class Chromosome implements Comparable<Chromosome>{
 
     //basic eles
     Color color;
@@ -40,6 +40,10 @@ class Chromosome{
 //        print();
     }
 
+    int fitness() {
+        return 1;
+    }
+
     ArrayList<String> toArray(){
         ArrayList<String> chromosomeRepresentation = new ArrayList<>();
         String delimitedColor = this.color.getRed() + "," + this.color.getGreen() + "," + this.color.getBlue();
@@ -54,6 +58,12 @@ class Chromosome{
         System.out.println("this chromosome = " + this.x + " " + this.y + " " +
                             this.color.getRed() + "," + this.color.getBlue() + "," + this.color.getGreen() );
     }
+
+    @Override
+    public int compareTo(Chromosome chromo) {
+        return (this.fitness() < chromo.fitness() ? -1 : (this.fitness() == chromo.fitness() ? 0 : 1));
+    }
+
 
     //    int getFit(){
 //        EditImage edit = EditImage.getInstance();
