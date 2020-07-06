@@ -37,7 +37,7 @@ public class HImgRec{
         imgCtrl.setTargetImage(targetImage);
         int w = imgCtrl.getW();
         int h = imgCtrl.getH();
-        int iter = 10000;
+        int iter = 2000;
         long processTime, completionTime;
 
         BufferedImage outputImg = new BufferedImage(w, h,BufferedImage.TYPE_INT_RGB);
@@ -51,40 +51,41 @@ public class HImgRec{
         logWrite.logImageDetails(w,h,colors.size());
 
         /////
-        GeneticAlgorithm ga = new GeneticAlgorithm(10,w,h,20,0,50);
+//        GeneticAlgorithm ga = new GeneticAlgorithm(10,w,h,20,0,50);
         /////
+        basicMonteCarlo(edit, outputImg, imgCtrl, logWrite, colors, iter, util);
 
-        for( int i = 1; i<=iter; i++ ){
-
-            edit.drawFromInput(outputImg, ga.run());
-
-            int newAttempt = imgCtrl.comparisonWhole(outputImg);
-
-//            edit.draw(outputImg, colors);
-//            int newAttempt = imgCtrl.comparisonWhole(outputImg);
-//            int storedScore = imgCtrl.getStoredScore();
-//
-//            if(storedScore < 0.1){
-//                logWrite.logCompletion(i);
-//                imgCtrl.setStored(outputImg);
-//                imgCtrl.setStoredScore(newAttempt);
-//                break;
-//            }else if(newAttempt > storedScore){
-//                outputImg = imgCtrl.getStored();
-//            }else{
-//                imgCtrl.setStored(outputImg);
-//                imgCtrl.setStoredScore(newAttempt);
-//            }
-            if(i % 100 == 0){
-                logWrite.logLoopData(i,newAttempt);
-                util.saveImg(outputImg, "res/out/output" + i + ".jpg");
-            }
-
-        }
         completionTime = System.currentTimeMillis() - processTime;
         logWrite.logImageDetails(w,h,colors.size());
         logWrite.logTimeInfo(completionTime);
 
-//        util.displayImage(outputImg);
+        util.displayImage(outputImg);
     }
+
+    static void basicMonteCarlo(EditImage edit, BufferedImage outputImg,
+                                ImageComparison imgCtrl, Logging logWrite,
+                                Set<Color> colors, int iter,
+                                Utilities util){
+        for( int i = 1; i<=iter; i++ ) {
+            edit.draw(outputImg, colors);
+            int newAttempt = imgCtrl.comparisonWhole(outputImg);
+            int storedScore = imgCtrl.getStoredScore();
+
+            if(storedScore < 0.1){
+                logWrite.logCompletion(i);
+                imgCtrl.setStored(outputImg);
+                imgCtrl.setStoredScore(newAttempt);
+            }else if (newAttempt > storedScore) {
+                outputImg = imgCtrl.getStored();
+            } else {
+                imgCtrl.setStored(outputImg);
+                imgCtrl.setStoredScore(newAttempt);
+            }
+            if(i % 100 == 0){
+                logWrite.logLoopData(i,storedScore);
+                util.saveImg(outputImg, "res/out/output" + i + ".jpg");
+            }
+        }
+    }
+
 }
