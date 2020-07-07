@@ -1,10 +1,13 @@
-package h.img.rec;
+package h.img.rec.Heuristics.GA;
+
+import h.img.rec.EditImage;
+import h.img.rec.Utilities;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
-class GeneticAlgorithm {
+public class GeneticAlgorithm {
     //TODO
     //mutation rate
     //crossover rates and different implementations
@@ -17,7 +20,7 @@ class GeneticAlgorithm {
     private ArrayList<Chromosome> population = new ArrayList<>();
 
     //set values
-    GeneticAlgorithm(int popSize, int x, int y, int muteRate, double crossOverRate, int iters){
+    public GeneticAlgorithm(int popSize, int x, int y, int muteRate, double crossOverRate, int iters){
         this.popSize = popSize;
         this.generations = iters;
         this.maxX = x;
@@ -26,7 +29,7 @@ class GeneticAlgorithm {
         this.crossOverRate = crossOverRate;
     }
 
-    ArrayList<Chromosome> run(){
+    public ArrayList<Chromosome> run(){
         initPopulation();
         for(int i=0;i<generations;i++){
             crossover();

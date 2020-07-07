@@ -1,5 +1,7 @@
 package h.img.rec;
 
+import h.img.rec.Heuristics.GA.GeneticAlgorithm;
+
 import java.awt.Color;
 import java.io.IOException;
 import java.awt.image.BufferedImage;
@@ -50,19 +52,25 @@ public class HImgRec{
         Logging logWrite = new Logging(image, edit.getStyle().toString(),String.valueOf(processTime) ,2);
         logWrite.logImageDetails(w,h,colors.size());
 
-        /////
-//        GeneticAlgorithm ga = new GeneticAlgorithm(10,w,h,20,0,50);
-        /////
+//        geneticAlgorithm(edit, outputImg,w,h);
+
         basicMonteCarlo(edit, outputImg, imgCtrl, logWrite, colors, iter, util);
 
         completionTime = System.currentTimeMillis() - processTime;
         logWrite.logImageDetails(w,h,colors.size());
         logWrite.logTimeInfo(completionTime);
 
-        util.displayImage(outputImg);
+        util.displayImage(imgCtrl.getStored());
     }
 
-    static void basicMonteCarlo(EditImage edit, BufferedImage outputImg,
+    private static void geneticAlgorithm(EditImage edit, BufferedImage outputImg, int w, int h){
+
+        GeneticAlgorithm ga = new GeneticAlgorithm(10,w,h,20,0,50);
+        edit.drawFromInput(outputImg, ga.run());
+
+    }
+
+    private static void basicMonteCarlo(EditImage edit, BufferedImage outputImg,
                                 ImageComparison imgCtrl, Logging logWrite,
                                 Set<Color> colors, int iter,
                                 Utilities util){

@@ -11,7 +11,7 @@ import java.util.concurrent.ThreadLocalRandom;
  *
  * @author nick
  */
-class Utilities {
+public class Utilities {
 
     //TODO -
     //     - reading parameter input file?
@@ -31,7 +31,7 @@ class Utilities {
         return ImageIO.read(file);
     }
 
-    int rng(int max){ return ThreadLocalRandom.current().nextInt(0,max); }
+    public int rng(int max){ return ThreadLocalRandom.current().nextInt(0,max); }
 
     void displayImage(BufferedImage toDisplay){
         JLabel label1 = new JLabel(new ImageIcon(toDisplay));

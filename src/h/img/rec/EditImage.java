@@ -1,5 +1,7 @@
 package h.img.rec;
 
+import h.img.rec.Heuristics.GA.Chromosome;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -10,7 +12,7 @@ import java.util.Set;
  *
  * @author nick
  */
-class EditImage {
+public class EditImage {
 
     private static EditImage instance;
     private Utilities util = new Utilities();
@@ -18,7 +20,7 @@ class EditImage {
 
     private EditImage(){}
 
-    static EditImage getInstance(){
+    public static EditImage getInstance(){
         if(instance ==null){
             instance = new EditImage();
         }
@@ -29,11 +31,11 @@ class EditImage {
         this.style = style;
     }
 
-    drawStyle getStyle(){
+    public drawStyle getStyle(){
         return this.style;
     }
 
-    enum drawStyle{
+    public enum drawStyle{
         LINE,
         THICK_LINE,
         CIRCLE,

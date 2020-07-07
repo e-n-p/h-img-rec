@@ -1,4 +1,6 @@
-package h.img.rec;
+package h.img.rec.Heuristics.GA;
+
+import h.img.rec.ImageComparison;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -43,7 +45,6 @@ public class ThickLineChromosome extends Chromosome {
         return diff;
     }
 
-    @Override
     void print() {
         System.out.println("this chromosome = x co-ord" +
                             this.x + ", y co-ord " + this.y +

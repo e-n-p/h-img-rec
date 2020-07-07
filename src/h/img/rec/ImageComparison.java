@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
  *
  * @author nick
  */
-class ImageComparison {
+public class ImageComparison {
 
     private static ImageComparison instance;
 
@@ -22,7 +22,7 @@ class ImageComparison {
 
     private ImageComparison(){}
 
-    static ImageComparison getInstance(){
+    public static ImageComparison getInstance(){
         if( instance == null){
             instance = new ImageComparison();
         }
@@ -35,7 +35,7 @@ class ImageComparison {
     int getH() { return h; }
     int getW() { return w; }
 
-    BufferedImage getTargetImg(){ return targetImg; }
+    public BufferedImage getTargetImg(){ return targetImg; }
     void setTargetImage(BufferedImage TargetImg) {
         this.targetImg = TargetImg;
         this.h = targetImg.getHeight();
