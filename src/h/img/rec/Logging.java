@@ -1,9 +1,10 @@
 package h.img.rec;
 
+import java.awt.image.BufferedImage;
 import java.io.FileWriter;
 import java.util.concurrent.TimeUnit;
 
-class Logging {
+public class Logging {
     private FileWriter fileWriter;
     private int setLogLevel;
     enum logLevel{
@@ -15,8 +16,8 @@ class Logging {
     Logging(String fileName, String drawMethod, String timeCode, int setLevel) {
         try {
             String finalFileName = fileName + "-" + drawMethod + "-" + timeCode + ".txt";
-//            this.fileWriter = new FileWriter("D://Documents//workspace//h-img-rec//res//out//" + finalFileName);
-            this.fileWriter = new FileWriter("/home/nick/Projects/h-img-rec/res/out/" + finalFileName);
+            this.fileWriter = new FileWriter("D://Documents//workspace//h-img-rec//res//out//" + finalFileName);
+//            this.fileWriter = new FileWriter("/home/nick/Projects/h-img-rec/res/out/" + finalFileName);
             if(setLevel > 2 || setLevel < 0){
                 throw new Exception("Invalid Log level");
             }
@@ -72,5 +73,21 @@ class Logging {
         }catch (Exception e){
             System.out.println("Exception caught while closing file: " + e);
         }
+    }
+
+    void logImage(int progress, int rate, BufferedImage image){
+        if(progress % rate == 0){
+            Utilities util = new Utilities();
+            util.saveImg(image, "res/out/output" + progress + ".jpg");
+        }
+
+    }
+    void logImage(int progress, int rate, int currentScore, BufferedImage image){
+        if(progress % rate == 0){
+            Utilities util = new Utilities();
+            logLoopData(progress,currentScore);
+            util.saveImg(image, "res/out/output" + progress + ".jpg");
+        }
+
     }
 }
