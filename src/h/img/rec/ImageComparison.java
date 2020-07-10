@@ -74,4 +74,24 @@ public class ImageComparison {
         return diff;
     }
 
+    public int partComparison(Color aColor, int startY, int startX, int endY, int endX){
+        int diff =0;
+        int heightToCheck = boundsCheck(h, startY, (startY+endY));
+        int widthToCheck = boundsCheck(w, startX, (startX+endX));
+        for( int i = startY; i < heightToCheck ; i++ ){
+            for( int j = startX; j < widthToCheck ; j++ ){
+                Color bColor = new Color(targetImg.getRGB(j, i));
+                int redDiff = Math.abs(aColor.getRed() - bColor.getRed());
+                int blueDiff = Math.abs(aColor.getBlue() - bColor.getBlue());
+                int greenDiff = Math.abs(aColor.getGreen() - bColor.getGreen());
+                diff += redDiff + blueDiff + greenDiff;
+            }
+        }
+        return diff;
+    }
+
+    private int boundsCheck(int maxDimension, int dimension , int toRange){
+        return ( toRange > maxDimension ? maxDimension : toRange);
+    }
+
 }

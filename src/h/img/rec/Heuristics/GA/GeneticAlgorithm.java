@@ -9,7 +9,6 @@ import java.util.Collections;
 
 public class GeneticAlgorithm {
     //TODO
-    //mutation rate
     //crossover rates and different implementations
     private int popSize;
     private int muteRate;
@@ -20,9 +19,9 @@ public class GeneticAlgorithm {
     private ArrayList<Chromosome> population = new ArrayList<>();
 
     //set values
-    public GeneticAlgorithm(int popSize, int x, int y, int muteRate, double crossOverRate, int iters){
+    public GeneticAlgorithm(int popSize, int x, int y, int muteRate, double crossOverRate, int generations){
         this.popSize = popSize;
-        this.generations = iters;
+        this.generations = generations;
         this.maxX = x;
         this.maxY = y;
         this.muteRate = muteRate;
@@ -42,22 +41,43 @@ public class GeneticAlgorithm {
 
     //create population
     private void initPopulation(){
-        EditImage edit = EditImage.getInstance();
         population.clear();
         for(int i=0;i<popSize;i++){
-            switch(edit.getStyle()){
-                case LINE:
-                    break;
-                case THICK_LINE:
-                    population.add(new ThickLineChromosome(maxX-3, maxY-60));
-                    break;
-                case ARC:
-                    break;
-                case CIRCLE:
-                    //e.g
-//                    population.add(new CircleChromosome(0,0,0));
-                    break;
-            }
+            addToPopulation(null);
+        }
+    }
+
+    private void addToPopulation(ArrayList<String> child){
+        EditImage edit = EditImage.getInstance();
+        switch(edit.getStyle()){
+            case LINE:
+//                if(child == null){
+//
+//                }else{
+//
+//                }
+                break;
+            case THICK_LINE:
+                if(child == null){
+                    population.add(new ThickLineChromosome(maxX, maxY, edit.getStyleHeight(), edit.getStyleWidth()));
+                }else{
+                    population.add(new ThickLineChromosome(child));
+                }
+                break;
+            case ARC:
+//                if(child == null){
+//
+//                }else{
+//
+//                }
+                break;
+            case CIRCLE:
+                if(child == null){
+                    population.add(new CircleChromosome(maxX, maxY, edit.getStyleHeight(), edit.getStyleWidth()));
+                }else{
+                    population.add(new CircleChromosome(child));
+                }
+                break;
         }
     }
 
@@ -86,41 +106,47 @@ public class GeneticAlgorithm {
             Chromosome p1 = population.get(i+1);
             ArrayList<String> parent0 = p0.toArray();
             ArrayList<String> parent1 = p1.toArray();
-            ArrayList<String> child = new ArrayList<>();
+            ArrayList<String> child0 = new ArrayList<>();
+            ArrayList<String> child1 = new ArrayList<>();
+//            System.out.println("-----1?>" + parent0.size());
+//            System.out.println("-----2?>" + parent1.size());
 
-            for(int j=0; j<3; j++){
+            for(int j=0; j<p0.getFeatures(); j++){
 
                 if( util.rng(1) == 0 ){
-                    child.add(parent0.get(j));
+                    child0.add(parent0.get(j));
+                    child1.add(parent1.get(j));
 //                    System.out.println(parent0.get(j));
 
                 }else{
-                    child.add(parent1.get(j));
+                    child0.add(parent0.get(j));
+                    child1.add(parent1.get(j));
 //                    System.out.println(parent1.get(j));
                 }
 
             }
-            population.add(new ThickLineChromosome(child));
-
+            addToPopulation(child0);
+            addToPopulation(child1);
         }
 
     }
 
     //mutation
+    //TODO move to individual chromo, easier to control
     private void mutate(){
         Utilities util = new Utilities();
-        for(Chromosome tlc : population ){
+        for(Chromosome chromosome : population ){
             for(int j=0; j<3; j++) {
                 if (util.rng(100) <= muteRate) {
                     switch( util.rng(3) ){
                         case 0:
-                            tlc.setX(util.rng(maxX-3));
+                            chromosome.setX(util.rng(maxX));
                             break;
                         case 1:
-                            tlc.setY(util.rng(maxY-60));
+                            chromosome.setY(util.rng(maxY));
                             break;
                         case 2:
-                            tlc.setColor(new Color(util.rng(255),util.rng(255),util.rng(255)));
+                            chromosome.setColor(new Color(util.rng(255),util.rng(255),util.rng(255)));
                             break;
                     }
 
@@ -129,7 +155,6 @@ public class GeneticAlgorithm {
         }
 
     }
-
 
     //culling popSize
     private void cull(){

@@ -1,6 +1,8 @@
 package h.img.rec;
 
 import h.img.rec.Heuristics.GA.Chromosome;
+import h.img.rec.Heuristics.GA.CircleChromosome;
+import h.img.rec.Heuristics.GA.ThickLineChromosome;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -17,18 +19,25 @@ public class EditImage {
     private static EditImage instance;
     private Utilities util = new Utilities();
     private drawStyle style;
+    private int styleHeight;
+    private int styleWidth;
+
+    public int getStyleHeight() { return styleHeight; }
+    public int getStyleWidth() { return styleWidth; }
 
     private EditImage(){}
 
     public static EditImage getInstance(){
-        if(instance ==null){
+        if(instance == null){
             instance = new EditImage();
         }
         return instance;
     }
 
-    void setStyle(drawStyle style) {
+    void setStyle(drawStyle style, int width, int height ) {
         this.style = style;
+        this.styleWidth = width;
+        this.styleHeight = height;
     }
 
     public drawStyle getStyle(){
@@ -85,17 +94,35 @@ public class EditImage {
         return palette[randomPick];
     }
 
-    //TODO new draw method from given pre-decided input
+
+    //TODO create middle format to interface between EditImage and the different algorithms?
     void drawFromInput(BufferedImage anImg, ArrayList<Chromosome> input){
-        for(Chromosome tlc : input){
+        for(Chromosome chromosome : input){
             Graphics2D graphics = anImg.createGraphics();
-            graphics.setColor(tlc.getColor());
-            graphics.fillRect(tlc.getX(),tlc.getY(),3,60);
+            graphics.setColor(chromosome.getColor());
+            switch (this.style) {
+                case LINE:
+                    // x1, y1      x2 y2
+//                    graphics.drawLine(chromosome.getX(),chromosome.getY() positions[2], positions[3]);
+                    break;
+                case THICK_LINE:
+                    ThickLineChromosome thickLineChromosome = (ThickLineChromosome) chromosome;
+                    graphics.fillRect(thickLineChromosome.getX(),thickLineChromosome.getY(), thickLineChromosome.getWidth(), thickLineChromosome.getHeight());
+                    break;
+                case CIRCLE:
+                    CircleChromosome circleChromosome = (CircleChromosome) chromosome;
+                    graphics.fillOval(circleChromosome.getX(),circleChromosome.getY(), circleChromosome.getWidth(), circleChromosome.getHeight());
+                    break;
+                case ARC:
+                    //arc
+//                    graphics.fillArc(positions[0], positions[1],33,50, 25, 30);
+                    break;
+            }
             graphics.dispose();
         }
     }
 
-    void draw(BufferedImage anImg, Set<Color> totalColors){
+    void drawRNG(BufferedImage anImg, Set<Color> totalColors){
 
         Graphics2D graphics = anImg.createGraphics();
         Color rngColor = getRNGColor(totalColors);

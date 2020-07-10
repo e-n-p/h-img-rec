@@ -7,42 +7,38 @@ import java.util.ArrayList;
 
 public class ThickLineChromosome extends Chromosome {
 
+
     private int width;
     private int height;
 
     public int getWidth() { return width; }
-    public void setWidth(int width) { this.width = width; }
     public int getHeight() { return height; }
+    public int getFeatures(){ return 5; }
 
     ThickLineChromosome(ArrayList<String> constructor) {
         super(constructor);
-        this.width =3;
-        this.height=60;
+        this.width = Integer.valueOf(constructor.get(3));
+        this.height = Integer.valueOf(constructor.get(4));
     }
 
-    ThickLineChromosome(int maxX, int maxY) {
+    ThickLineChromosome(int maxX, int maxY, int height, int width) {
         super(maxX, maxY);
-        this.width =3;
-        this.height=60;
+        this.height = height;
+        this.width = width;
     }
 
-    public void setHeight(int height) { this.height = height; }
-
+    //TODO move method to imageComparison
     int fitness(){
-        int diff = 0;
         ImageComparison imgC =  ImageComparison.getInstance();
+        return imgC.partComparison(color, this.y, this.x, this.height, this.width);
+    }
 
-        Color aColor = color;
-        for(int i=this.y; i < (this.y+height) ; i++){
-            for(int j=this.x; j < (this.x+width) ; j++){
-                Color bColor = new Color(imgC.getTargetImg().getRGB(j, i));
-                int redDiff = Math.abs(aColor.getRed() - bColor.getRed());
-                int blueDiff = Math.abs(aColor.getBlue() - bColor.getBlue());
-                int greenDiff = Math.abs(aColor.getGreen() - bColor.getGreen());
-                diff += redDiff + blueDiff + greenDiff;
-            }
-        }
-        return diff;
+    @Override
+    ArrayList<String> toArray() {
+        ArrayList<String> chromosomeRepresentation = super.toArray();
+        chromosomeRepresentation.add(String.valueOf(this.width));
+        chromosomeRepresentation.add(String.valueOf(this.height));
+        return chromosomeRepresentation;
     }
 
     void print() {
@@ -50,12 +46,5 @@ public class ThickLineChromosome extends Chromosome {
                             this.x + ", y co-ord " + this.y +
                             " RGB values=" + this.color.getRed() + "," + this.color.getBlue() + "," + this.color.getGreen() +
                             " line thickness " + this.width + ", line height " + this.height);
-
     }
-
-//    @Override
-//    public int compareTo(ThickLineChromosome chromo) {
-//        return (this.fitness() < chromo.fitness() ? -1 : (this.fitness() == chromo.fitness() ? 0 : 1));
-//    }
-
 }

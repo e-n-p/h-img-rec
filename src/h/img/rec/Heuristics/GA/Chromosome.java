@@ -13,23 +13,22 @@ abstract public class Chromosome implements Comparable<Chromosome>{
     int y;
 
     public Color getColor() { return color; }
-
     void setColor(Color color) { this.color = color; }
 
     public int getX() { return x; }
-
     void setX(int x){ this.x = x; }
 
     public int getY(){ return y; }
-
     void setY(int y) { this.y = y; }
 
-    Chromosome(ArrayList<String> constructor){
+    abstract int getFeatures();
 
+    //["color[255,255,255]","x","y"]
+    Chromosome(ArrayList<String> constructor){
         String[] rgb = constructor.get(0).split(",");
+        this.color = new Color(Integer.valueOf(rgb[0]),Integer.valueOf(rgb[1]),Integer.valueOf(rgb[2]));
         this.x = Integer.valueOf(constructor.get(1));
         this.y = Integer.valueOf(constructor.get(2));
-        this.color = new Color(Integer.valueOf(rgb[0]),Integer.valueOf(rgb[0]),Integer.valueOf(rgb[0]));
     }
 
     Chromosome(int maxX, int maxY) {
@@ -48,7 +47,6 @@ abstract public class Chromosome implements Comparable<Chromosome>{
         chromosomeRepresentation.add(delimitedColor);
         chromosomeRepresentation.add(String.valueOf(this.x));
         chromosomeRepresentation.add(String.valueOf(this.y));
-
         return chromosomeRepresentation;
     }
 

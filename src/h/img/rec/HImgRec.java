@@ -25,10 +25,10 @@ public class HImgRec{
         cat.jpg
         coloredRectangles.jpg
         20x20b&w.jpg
-        String filePath = "D:/Documents/workspace/h-img-rec/res/input/";
-*/
         String filePath = "/home/nick/Projects/h-img-rec/res/input/";
-        String image = "myFace";
+*/
+        String filePath = "D:/Documents/workspace/h-img-rec/res/input/";
+        String image = "flowers";
         String fileType = ".jpg";
         String path = filePath + image + fileType;
 
@@ -39,7 +39,7 @@ public class HImgRec{
         imgCtrl.setTargetImage(targetImage);
         int w = imgCtrl.getW();
         int h = imgCtrl.getH();
-        int iter = 2000;
+        int iter = 500000;
         long processTime, completionTime;
 
         BufferedImage outputImg = new BufferedImage(w, h,BufferedImage.TYPE_INT_RGB);
@@ -47,35 +47,40 @@ public class HImgRec{
         imgCtrl.setStored(outputImg);
         imgCtrl.setStoredScore(Integer.MAX_VALUE);
         Set<Color> colors = edit.readColour(h,w,targetImage);
-        edit.setStyle(EditImage.drawStyle.THICK_LINE);
+        edit.setStyle(EditImage.drawStyle.CIRCLE, 15,15);
+//        edit.setStyle(EditImage.drawStyle.THICK_LINE, 80,4);
         processTime = System.currentTimeMillis();
-        Logging logWrite = new Logging(image, edit.getStyle().toString(),String.valueOf(processTime) ,2);
+        Logging logWrite = new Logging(image, edit.getStyle().toString(), String.valueOf(processTime), 2);
         logWrite.logImageDetails(w,h,colors.size());
 
-//        geneticAlgorithm(edit, outputImg,w,h);
+        geneticAlgorithm(edit, outputImg, w, h, iter, logWrite);
 
-        basicMonteCarlo(edit, outputImg, imgCtrl, logWrite, colors, iter, util);
+//        basicMonteCarlo(edit, outputImg, imgCtrl, logWrite, colors, iter, util);
 
         completionTime = System.currentTimeMillis() - processTime;
         logWrite.logImageDetails(w,h,colors.size());
         logWrite.logTimeInfo(completionTime);
 
-        util.displayImage(imgCtrl.getStored());
+//        util.displayImage(imgCtrl.getStored());
     }
 
-    private static void geneticAlgorithm(EditImage edit, BufferedImage outputImg, int w, int h){
+    private static void geneticAlgorithm(EditImage edit, BufferedImage outputImg,
+                                         int w, int h, int iter, Logging logging){
 
-        GeneticAlgorithm ga = new GeneticAlgorithm(10,w,h,20,0,50);
-        edit.drawFromInput(outputImg, ga.run());
+        GeneticAlgorithm ga = new GeneticAlgorithm(10,w,h,20,0,75);
+
+        for( int i = 1; i<=iter; i++ ){
+            edit.drawFromInput(outputImg, ga.run());
+            logging.logImage(i,100, outputImg);
+        }
 
     }
 
     private static void basicMonteCarlo(EditImage edit, BufferedImage outputImg,
                                 ImageComparison imgCtrl, Logging logWrite,
-                                Set<Color> colors, int iter,
-                                Utilities util){
+                                Set<Color> colors, int iter){
         for( int i = 1; i<=iter; i++ ) {
-            edit.draw(outputImg, colors);
+            edit.drawRNG(outputImg, colors);
             int newAttempt = imgCtrl.comparisonWhole(outputImg);
             int storedScore = imgCtrl.getStoredScore();
 
@@ -89,10 +94,7 @@ public class HImgRec{
                 imgCtrl.setStored(outputImg);
                 imgCtrl.setStoredScore(newAttempt);
             }
-            if(i % 100 == 0){
-                logWrite.logLoopData(i,storedScore);
-                util.saveImg(outputImg, "res/out/output" + i + ".jpg");
-            }
+            logWrite.logImage(i,100, storedScore, outputImg);
         }
     }
 
